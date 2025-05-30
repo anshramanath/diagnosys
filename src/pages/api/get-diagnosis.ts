@@ -15,21 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .join("\n")
 
   const prompt = `
-You are a warm, professional virtual medical assistant. Based on the intake conversation below, speak directly to the patient and provide:
+    You are a warm, professional virtual medical assistant. Based on the intake conversation below, speak directly to the patient and provide:
 
-1. A friendly, empathetic explanation of their likely diagnosis
-2. A brief, clear treatment plan with practical next steps
+    1. A friendly, empathetic explanation of their likely diagnosis
+    2. A brief, clear treatment plan with practical next steps
 
-Be conversational and kind — like you're explaining things in person to help them feel understood and supported. Respond in this JSON format:
+    Be conversational and kind — like you're explaining things in person to help them feel understood and supported. Respond in this JSON format:
 
-{
-  "diagnosis": "Write the explanation to the patient here.",
-  "treatment": "Write the treatment plan directly to the patient here."
-}
+    {
+      "diagnosis": "Write the explanation to the patient here.",
+      "treatment": "Write the treatment plan directly to the patient here."
+    }
 
-Conversation:
-${formattedHistory}
-`
+    Conversation:
+    ${formattedHistory}
+  `
 
   try {
     const response = await fetch("https://api.cohere.ai/v1/generate", {
