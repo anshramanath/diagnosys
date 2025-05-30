@@ -1,30 +1,36 @@
-"use client"
+import { Box, Button, TextField } from "@mui/material"
 import { useState } from "react"
-import { Box, TextField, IconButton } from "@mui/material"
-import SendIcon from "@mui/icons-material/Send"
 
-export default function ChatInput({ onSend, disabled }: { onSend: (msg: string) => void; disabled: boolean }) {
+export default function ChatInput({
+  onSend,
+  disabled,
+}: {
+  onSend: (msg: string) => void
+  disabled: boolean
+}) {
   const [input, setInput] = useState("")
 
-  const handleSend = () => {
-    if (!input.trim()) return
-    onSend(input.trim())
-    setInput("")
+  const handleSubmit = () => {
+    if (input.trim()) {
+      onSend(input.trim())
+      setInput("")
+    }
   }
 
   return (
-    <Box display="flex" gap={1}>
+    <Box sx={{ display: "flex", gap: 2 }}>
       <TextField
         fullWidth
-        value={input}
+        size="small"
         disabled={disabled}
+        value={input}
         onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         placeholder="Type your message..."
       />
-      <IconButton onClick={handleSend} disabled={disabled}>
-        <SendIcon />
-      </IconButton>
+      <Button onClick={handleSubmit} variant="contained" disabled={disabled}>
+        Send
+      </Button>
     </Box>
   )
 }

@@ -1,19 +1,15 @@
 "use client"
 
-import { useState } from "react"
 import ChatWindow from "@/components/ChatWindow"
-import DisclaimerDialog from "@/components/DisclaimerDialog"
-import StartOverDialog from "@/components/StartOverDialog"
+import { Container, Typography } from "@mui/material"
 
 export default function HomePage() {
-  const [accepted, setAccepted] = useState(false)
-  const [confirmReset, setConfirmReset] = useState(false)
-
   return (
-    <>
-      <DisclaimerDialog open={!accepted} onAccept={() => setAccepted(true)} />
-      <StartOverDialog open={confirmReset} onConfirm={() => window.location.reload()} onCancel={() => setConfirmReset(false)} />
-      {accepted && <ChatWindow onStartOver={() => setConfirmReset(true)} />}
-    </>
+    <Container maxWidth="md" sx={{ py: 5 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Virtual Medical Assistant
+      </Typography>
+      <ChatWindow />
+    </Container>
   )
 }

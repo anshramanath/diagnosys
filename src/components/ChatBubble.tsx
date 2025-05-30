@@ -1,20 +1,35 @@
-"use client"
-import { Box, Paper, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 
-export default function ChatBubble({ message, from }: { message: string; from: "user" | "assistant" }) {
+export default function ChatBubble({
+  from,
+  message,
+}: {
+  from: "user" | "assistant"
+  message: string
+}) {
   const isUser = from === "user"
+
   return (
-    <Box display="flex" justifyContent={isUser ? "flex-end" : "flex-start"} my={1}>
-      <Paper
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: isUser ? "flex-end" : "flex-start",
+        mb: 1,
+      }}
+    >
+      <Box
         sx={{
-          p: 1.5,
-          maxWidth: "75%",
-          backgroundColor: isUser ? "#1976d2" : "#f1f1f1",
+          backgroundColor: isUser ? "#1976d2" : "#f0f0f0",
           color: isUser ? "#fff" : "#000",
+          px: 2,
+          py: 1,
+          borderRadius: 2,
+          maxWidth: "70%",
+          textAlign: "left",
         }}
       >
-        <Typography variant="body1">{message}</Typography>
-      </Paper>
+        <Typography variant="body2">{message}</Typography>
+      </Box>
     </Box>
   )
 }
