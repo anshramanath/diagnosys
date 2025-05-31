@@ -28,7 +28,6 @@ type PdfData = {
 type Message = {
   role: "user" | "assistant"
   content: string
-  isConfirmation?: boolean
 }
 
 const questions = [
@@ -73,7 +72,6 @@ export default function ChatWindow() {
     addMessage({
       role: "assistant",
       content: `You said: "${input}". Is that correct?`,
-      isConfirmation: true,
     })
   }
 
@@ -101,6 +99,7 @@ export default function ChatWindow() {
             setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: `📋 Diagnosis:\n${data.diagnosis}` })
             addMessage({ role: "assistant", content: `💊 Treatment Plan:\n${data.treatment}` })
+            addMessage({ role: "assistant", content: "Now generating health summary..." })
 
             return fetch("/api/extract-fields", {
               method: "POST",
@@ -115,15 +114,18 @@ export default function ChatWindow() {
             })
           })
           .then(res => res.json())
-          .then(fields => setPdfData(fields))
+          .then(fields => {
+            setMessages(prev => prev.slice(0, -1))
+            addMessage({ role: "assistant", content: "Your health summary is available!" })
+            setPdfData(fields)
+          })
           .catch(() => {
             setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: "Sorry, I wasn't able to generate a diagnosis at this time." })
           })
       }
     } else {
-      setMessages(prev => prev.slice(0, -3))
-      addMessage({ role: "assistant", content: questions[step] })
+      setMessages(prev => prev.slice(0, -2))
     }
   }
 
@@ -148,7 +150,7 @@ export default function ChatWindow() {
           Health Summary
         </Button>
         <Box onClick={handleReset} sx={{ cursor: "pointer" }}>
-          <Image src="reset.png" alt="Reset" width={28} height={28} />
+          <Image src="/reset.png" alt="Reset" width={28} height={28} />
         </Box>
       </Box>
 
