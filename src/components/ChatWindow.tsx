@@ -150,8 +150,8 @@ export default function ChatWindow() {
 
         {awaitingConfirmation && !done && (
           <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 1 }}>
-            <Button variant="outlined" onClick={() => handleConfirm(true)}>Yes</Button>
-            <Button variant="outlined" color="error" onClick={() => handleConfirm(false)}>No</Button>
+            <Button variant="outlined" onClick={() => handleConfirm(true)} sx={{ textTransform: "none" }}>Yes</Button>
+            <Button variant="outlined" color="error" onClick={() => handleConfirm(false)} sx={{ textTransform: "none" }}>No</Button>
           </Box>
         )}
 
