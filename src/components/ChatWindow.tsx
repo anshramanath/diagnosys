@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import { Box, Stack, Button } from "@mui/material"
+import { Box, Stack, Button, Typography } from "@mui/material"
 import ChatBubble from "./ChatBubble"
 import ChatInput from "./ChatInput"
+import PDFPreviewModal from "./PDFPreviewModal"
 
 type Message = {
   role: "user" | "assistant"
@@ -30,6 +31,9 @@ export default function ChatWindow() {
   const [answers, setAnswers] = useState<string[]>([])
   const [step, setStep] = useState(0)
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false)
+  const [pdfData, setPdfData] = useState<any>(null)
+  const [showPreview, setShowPreview] = useState(false)
+  const [done, setDone] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -62,16 +66,16 @@ export default function ChatWindow() {
     setAwaitingConfirmation(false)
 
     if (confirmed) {
-      setMessages(prev => prev.slice(0, -1)) // remove confirmation only
+      setMessages(prev => prev.slice(0, -1)) // remove confirmation
       const nextStep = step + 1
       setStep(nextStep)
 
       if (nextStep < questions.length) {
         addMessage({ role: "assistant", content: questions[nextStep] })
       } else {
-        // Final step: call API for diagnosis
+        setDone(true)
         addMessage({ role: "assistant", content: "Thank you. Let me review your responses..." })
-      
+
         fetch("/api/get-diagnosis", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -82,21 +86,42 @@ export default function ChatWindow() {
             setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: `📋 Diagnosis:\n${data.diagnosis}` })
             addMessage({ role: "assistant", content: `💊 Treatment Plan:\n${data.treatment}` })
+
+            return fetch("/api/extract-fields", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ chatSummary: [...messages, 
+                { role: "assistant", content: data.diagnosis }, 
+                { role: "assistant", content: data.treatment } 
+              ] }),
+            })
           })
+          .then(res => res.json())
+          .then(fields => setPdfData(fields))
           .catch(() => {
             setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: "Sorry, I wasn't able to generate a diagnosis at this time." })
           })
-      }      
+      }
     } else {
       setAnswers(prev => prev.slice(0, -1))
-      setMessages(prev => prev.slice(0, -3)) // remove Q, A, and confirmation
+      setMessages(prev => prev.slice(0, -3)) // remove Q, A, confirmation
       addMessage({ role: "assistant", content: questions[step] })
     }
   }
 
   return (
-    <Stack spacing={2} sx={{ p: 3, maxWidth: 700, mx: "auto" }}>
+    <Stack spacing={2} sx={{ p: 3, maxWidth: 700, mx: "auto", position: "relative" }}>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button 
+          variant="outlined" 
+          disabled={!pdfData} 
+          onClick={() => setShowPreview(true)}
+        >
+          Health Summary
+        </Button>
+      </Box>
+
       <Box
         sx={{
           height: 400,
@@ -112,7 +137,7 @@ export default function ChatWindow() {
           <ChatBubble key={i} from={m.role} message={m.content} />
         ))}
 
-        {awaitingConfirmation && (
+        {(awaitingConfirmation && !done) && (
           <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 1 }}>
             <Button variant="outlined" onClick={() => handleConfirm(true)}>
               Yes
@@ -123,11 +148,12 @@ export default function ChatWindow() {
           </Box>
         )}
 
-        {/* Auto scroll anchor */}
         <div ref={scrollRef} />
       </Box>
 
-      <ChatInput onSend={handleSend} disabled={awaitingConfirmation} />
+      <ChatInput onSend={handleSend} disabled={awaitingConfirmation || done} />
+
+      <PDFPreviewModal open={showPreview} onClose={() => setShowPreview(false)} structuredData={pdfData} />
     </Stack>
   )
 }
