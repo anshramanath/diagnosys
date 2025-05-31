@@ -28,7 +28,7 @@ export default function ChatInput({
         onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         placeholder="Type your message..."
       />
-      <Button onClick={handleSubmit} variant="contained" disabled={disabled}>
+      <Button onClick={handleSubmit} variant="contained" disabled={disabled} sx={{ textTransform: "none" }}>
         Send
       </Button>
     </Box>

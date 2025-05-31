@@ -1,3 +1,10 @@
+export const metadata = {
+  title: "Diagnosys",
+  icons: {
+    icon: "/plus.png",
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
       <html lang="en">

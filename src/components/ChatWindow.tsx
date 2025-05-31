@@ -1,5 +1,7 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react"
-import { Box, Stack, Button, Typography } from "@mui/material"
+import { Box, Stack, Button } from "@mui/material"
 import ChatBubble from "./ChatBubble"
 import ChatInput from "./ChatInput"
 import PDFPreviewModal from "./PDFPreviewModal"
@@ -13,7 +15,7 @@ type Message = {
 const questions = [
   "Before we begin, may I get your full name?",
   "Thanks! And how old are you?",
-  "What sex were you assigned at birth? (Male, Female, or Other)",
+  "What sex were you assigned at birth? (Male or Female)",
   "Are you currently sexually active?",
   "Do you smoke, drink alcohol, or use any recreational drugs?",
   "Do you currently take any medications, vitamins, or supplements — prescribed or over-the-counter?",
@@ -27,18 +29,13 @@ const questions = [
 ]
 
 export default function ChatWindow() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [answers, setAnswers] = useState<string[]>([])
+  const [messages, setMessages] = useState<Message[]>([{ role: "assistant", content: questions[0] }])
   const [step, setStep] = useState(0)
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false)
   const [pdfData, setPdfData] = useState<any>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [done, setDone] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setMessages([{ role: "assistant", content: questions[0] }])
-  }, [])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -52,7 +49,6 @@ export default function ChatWindow() {
     if (!input.trim() || awaitingConfirmation) return
 
     addMessage({ role: "user", content: input })
-    setAnswers(prev => [...prev, input])
     setAwaitingConfirmation(true)
 
     addMessage({
@@ -74,7 +70,7 @@ export default function ChatWindow() {
         addMessage({ role: "assistant", content: questions[nextStep] })
       } else {
         setDone(true)
-        addMessage({ role: "assistant", content: "Thank you. Let me review your responses..." })
+        addMessage({ role: "assistant", content: "Thank you! Let me review your responses..." })
 
         fetch("/api/get-diagnosis", {
           method: "POST",
@@ -90,10 +86,13 @@ export default function ChatWindow() {
             return fetch("/api/extract-fields", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ chatSummary: [...messages, 
-                { role: "assistant", content: data.diagnosis }, 
-                { role: "assistant", content: data.treatment } 
-              ] }),
+              body: JSON.stringify({
+                chatSummary: [
+                  ...messages,
+                  { role: "assistant", content: data.diagnosis },
+                  { role: "assistant", content: data.treatment }
+                ]
+              }),
             })
           })
           .then(res => res.json())
@@ -104,22 +103,34 @@ export default function ChatWindow() {
           })
       }
     } else {
-      setAnswers(prev => prev.slice(0, -1))
-      setMessages(prev => prev.slice(0, -3)) // remove Q, A, confirmation
+      setMessages(prev => prev.slice(0, -3))
       addMessage({ role: "assistant", content: questions[step] })
     }
   }
 
+  const handleReset = () => {
+    setMessages([{ role: "assistant", content: questions[0] }])
+    setStep(0)
+    setAwaitingConfirmation(false)
+    setPdfData(null)
+    setShowPreview(false)
+    setDone(false)
+  }
+
   return (
-    <Stack spacing={2} sx={{ p: 3, maxWidth: 700, mx: "auto", position: "relative" }}>
-      <Box display="flex" justifyContent="flex-end" mb={2}>
+    <Stack spacing={2} sx={{ position: "relative", height: "100%", display: "flex" }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
         <Button 
           variant="outlined" 
           disabled={!pdfData} 
-          onClick={() => setShowPreview(true)}
+          onClick={() => setShowPreview(true)} 
+          sx={{ textTransform: "none" }}
         >
           Health Summary
         </Button>
+        <Box onClick={handleReset} sx={{ cursor: "pointer" }}>
+          <img src="reset.png" alt="Reset" width={28} height={28} />
+        </Box>
       </Box>
 
       <Box
@@ -137,14 +148,10 @@ export default function ChatWindow() {
           <ChatBubble key={i} from={m.role} message={m.content} />
         ))}
 
-        {(awaitingConfirmation && !done) && (
+        {awaitingConfirmation && !done && (
           <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 1 }}>
-            <Button variant="outlined" onClick={() => handleConfirm(true)}>
-              Yes
-            </Button>
-            <Button variant="outlined" color="error" onClick={() => handleConfirm(false)}>
-              No
-            </Button>
+            <Button variant="outlined" onClick={() => handleConfirm(true)}>Yes</Button>
+            <Button variant="outlined" color="error" onClick={() => handleConfirm(false)}>No</Button>
           </Box>
         )}
 
@@ -152,7 +159,6 @@ export default function ChatWindow() {
       </Box>
 
       <ChatInput onSend={handleSend} disabled={awaitingConfirmation || done} />
-
       <PDFPreviewModal open={showPreview} onClose={() => setShowPreview(false)} structuredData={pdfData} />
     </Stack>
   )
