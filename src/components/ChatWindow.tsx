@@ -79,10 +79,12 @@ export default function ChatWindow() {
         })
           .then(res => res.json())
           .then(data => {
+            setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: `📋 Diagnosis:\n${data.diagnosis}` })
             addMessage({ role: "assistant", content: `💊 Treatment Plan:\n${data.treatment}` })
           })
           .catch(() => {
+            setMessages(prev => prev.slice(0, -1))
             addMessage({ role: "assistant", content: "Sorry, I wasn't able to generate a diagnosis at this time." })
           })
       }      
