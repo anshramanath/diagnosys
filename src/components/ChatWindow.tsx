@@ -2,9 +2,28 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Box, Stack, Button } from "@mui/material"
+import Image from "next/image"
 import ChatBubble from "./ChatBubble"
 import ChatInput from "./ChatInput"
 import PDFPreviewModal from "./PDFPreviewModal"
+
+type PdfData = {
+  name?: string
+  age?: string
+  sexAssignedAtBirth?: string
+  sexuallyActive?: string
+  substancesUsed?: string
+  medications?: string
+  healthConcerns?: string
+  symptoms?: string
+  onset?: string
+  previousOccurrences?: string
+  symptomProgression?: string
+  treatmentsTried?: string
+  additionalNotes?: string
+  diagnosis?: string
+  treatment?: string
+}
 
 type Message = {
   role: "user" | "assistant"
@@ -32,7 +51,7 @@ export default function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([{ role: "assistant", content: questions[0] }])
   const [step, setStep] = useState(0)
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false)
-  const [pdfData, setPdfData] = useState<any>(null)
+  const [pdfData, setPdfData] = useState<PdfData | null>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [done, setDone] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -129,7 +148,7 @@ export default function ChatWindow() {
           Health Summary
         </Button>
         <Box onClick={handleReset} sx={{ cursor: "pointer" }}>
-          <img src="reset.png" alt="Reset" width={28} height={28} />
+          <Image src="reset.png" alt="Reset" width={28} height={28} />
         </Box>
       </Box>
 

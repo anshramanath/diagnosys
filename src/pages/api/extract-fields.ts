@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const parsed = JSON.parse(jsonString)
 
     res.status(200).json(parsed)
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Invalid JSON output from LLM", raw: text })
   }
 }
