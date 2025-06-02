@@ -2,7 +2,7 @@
 
 import { Box, Card } from "@mui/material"
 import Image from "next/image"
-import ChatWindow from "@/components/ChatWindow"
+import ChatWindow from "@/components/chat/ChatWindow"
 
 export default function HomePage() {
   return (

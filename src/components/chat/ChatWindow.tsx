@@ -89,7 +89,7 @@ export default function ChatWindow() {
         setDone(true)
         addMessage({ role: "assistant", content: "Thank you! Let me review your responses..." })
 
-        fetch("/api/get-diagnosis", {
+        fetch("/api/chat/get-diagnosis", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ chatHistory: messages }),
@@ -101,7 +101,7 @@ export default function ChatWindow() {
             addMessage({ role: "assistant", content: `💊 Treatment Plan:\n${data.treatment}` })
             addMessage({ role: "assistant", content: "Now generating health summary..." })
 
-            return fetch("/api/extract-fields", {
+            return fetch("/api/chat/extract-fields", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
