@@ -2,6 +2,13 @@
 
 Diagnosys is a full-stack medical assistant web app that helps users understand their symptoms and stay informed about health trends in their area.
 
+## 🌐 Live Site
+
+You can access Diagnosys here:  
+[🔗 https://diagnosys-lake.vercel.app/](https://diagnosys-lake.vercel.app/)
+
+Explore both the **Symptom Chat** and **Health Trends** features directly in your browser.
+
 ## 🔍 What is Diagnosys?
 
 Diagnosys has **two core features**:
@@ -31,7 +38,7 @@ This helps users know what’s “going around” so they can be more cautious�
   - **Google Pollen API**
   - **Google Air Quality API**
   - **Delphi (CMU) FluView API**
-  - **disease.sh API**
+  - **Disease.sh API**
 
 ## 🚀 Getting Started
 
