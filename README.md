@@ -32,7 +32,7 @@ This helps users know what’s “going around” so they can be more cautious�
 
 - **Frontend**: Next.js (App Router) · TypeScript · Material UI
 - **Backend**: API routes in Next.js
-- **AI Model**: [Command model](https://cohere.com/command)
+- **AI Model**: [Cohere's Command Model](https://cohere.com/command)
 - **PDF Generation**: `@react-pdf/renderer`
 - **Health Data APIs**:
   - **Google Pollen API**
