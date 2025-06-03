@@ -13,7 +13,7 @@ You can access Diagnosys here:
 
 Diagnosys has **two core features**:
 
-### 💬 Symptom Chat
+### 🗣️ Symptom Chat
 An AI-powered assistant that:
 - Guides users through a friendly question-and-answer symptom check
 - Provides a likely **diagnosis** and basic **treatment suggestions**
