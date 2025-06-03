@@ -1,13 +1,16 @@
 "use client"
 
-import { Box, Card } from "@mui/material"
+import { Box, Card, Typography, Button } from "@mui/material"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import Image from "next/image"
 import ChatWindow from "@/components/chat/ChatWindow"
+import { useRouter } from "next/navigation"
 
 export default function HomePage() {
+  const router = useRouter()
+
   return (
     <>
-      {/* Animation Style */}
       <style jsx global>{`
         @keyframes float {
           0% {
@@ -26,53 +29,77 @@ export default function HomePage() {
         sx={{
           minHeight: "100vh",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           px: 2,
         }}
       >
-        <Card
-          sx={{
-            width: "100%",
-            maxWidth: 1200,
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "5fr 7fr" },
-            overflow: "hidden",
-            boxShadow: 6,
-            borderRadius: 5,
-          }}
-        >
-          {/* Left Side */}
-          <Box
+        {/* Outer container to limit width */}
+        <Box sx={{ width: "100%", maxWidth: 1200 }}>
+          {/* Back button aligned with card */}
+          <Button
+            onClick={() => router.push("/")}
+            startIcon={<ArrowBackIcon />}
+            variant="text"
+            sx={{ mb: 2, textTransform: "none", fontWeight: 500 }}
+          >
+            Back to Home
+          </Button>
+
+          {/* Card */}
+          <Card
             sx={{
-              bgcolor: "#e6f0ff",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              p: 4,
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "5fr 7fr" },
+              overflow: "hidden",
+              boxShadow: 6,
+              borderRadius: 5,
             }}
           >
-            <Image
-              src="/doctor.png"
-              alt="Medical Assistant"
-              width={220}
-              height={220}
-              style={{ animation: "float 3s ease-in-out infinite" }}
-            />
-            <Box sx={{ mt: 3, textAlign: "center" }}>
-              <h2 style={{ marginBottom: 8 }}>Virtual Medical Assistant</h2>
-              <p style={{ color: "#555" }}>
-                Answer a few questions to get a personalized health summary and care suggestions.
-              </p>
-            </Box>
-          </Box>
+            {/* Left Side */}
+            <Box
+              sx={{
+                bgcolor: "#e6f0ff",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 4,
+                textAlign: "center",
+              }}
+            >
+              <Image
+                src="/doctor.png"
+                alt="Medical Assistant"
+                width={220}
+                height={220}
+                style={{ animation: "float 3s ease-in-out infinite" }}
+              />
 
-          {/* Right Side */}
-          <Box sx={{ p: 3 }}>
-            <ChatWindow />
-          </Box>
-        </Card>
+              <Typography variant="h5" fontWeight="bold" mt={3} mb={1}>
+                Virtual Medical Assistant
+              </Typography>
+              <Typography variant="body1" color="text.secondary" mb={3}>
+                Answer a few questions to get a personalized health summary and care suggestions.
+              </Typography>
+
+              <Button
+                variant="outlined"
+                onClick={() => router.push("/trends")}
+                sx={{ textTransform: "none", fontWeight: 500 }}
+              >
+                View Health Trends →
+              </Button>
+            </Box>
+
+            {/* Right Side */}
+            <Box sx={{ p: { xs: 2, md: 3 } }}>
+              <ChatWindow />
+            </Box>
+          </Card>
+        </Box>
       </Box>
     </>
   )
