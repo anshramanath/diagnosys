@@ -1,5 +1,7 @@
 # 💬 Diagnosys – AI-Powered Symptom Checker & Health Trends Tracker
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Diagnosys is a full-stack medical assistant web app that helps users understand their symptoms and stay informed about health trends in their area.
 
 ## 🌐 Live Site
