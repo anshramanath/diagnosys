@@ -2,6 +2,7 @@
 
 import { Box, Card, Typography, Button } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import BarChartIcon from '@mui/icons-material/BarChart'
 import Image from "next/image"
 import ChatWindow from "@/components/chat/ChatWindow"
 import { useRouter } from "next/navigation"
@@ -87,10 +88,11 @@ export default function HomePage() {
 
               <Button
                 variant="outlined"
+                startIcon={<BarChartIcon />}
                 onClick={() => router.push("/trends")}
                 sx={{ textTransform: "none", fontWeight: 500 }}
               >
-                View Health Trends →
+                View Health Trends
               </Button>
             </Box>
 

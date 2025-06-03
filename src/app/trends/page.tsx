@@ -2,6 +2,7 @@
 
 import { Box, Container, Typography, Divider, Fade, Button } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"
 import { useRouter } from "next/navigation"
 import PollenChart from "@/components/trends/PollenChart"
 import FluChart from "@/components/trends/FluChart"
@@ -24,7 +25,7 @@ export default function TrendsPage() {
           Back to Home
         </Button>
 
-        {/* Page Heading */}
+        {/* Heading */}
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           🌐 Current Health Trends
         </Typography>
@@ -53,6 +54,18 @@ export default function TrendsPage() {
 
         <Box sx={{ mb: 6 }}>
           <PollutionChart />
+        </Box>
+
+        {/* View Symptom Chat Button */}
+        <Box display="flex" justifyContent="center" mt={6}>
+          <Button
+            onClick={() => router.push("/chat")}
+            startIcon={<ChatBubbleOutlineIcon />}
+            variant="outlined"
+            sx={{ textTransform: "none", fontWeight: 500 }}
+          >
+            View Symptom Chat
+          </Button>
         </Box>
       </Container>
     </Fade>
