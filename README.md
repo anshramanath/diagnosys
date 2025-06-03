@@ -7,7 +7,7 @@ Diagnosys is a full-stack medical assistant web app that helps users understand 
 ## 🌐 Live Site
 
 You can access Diagnosys here:  
-🔗 [diagnosys.com](https://diagnosys-lake.vercel.app)
+🔗 [Live Link](https://diagnosys-lake.vercel.app)
 
 ## 🔍 What is Diagnosys?
 
