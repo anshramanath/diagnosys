@@ -1,4 +1,4 @@
-# 💬 Diagnosys – AI-Powered Symptom Checker & Health Trends Tracker
+# 💬 Diagnosys
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
