@@ -23,6 +23,7 @@ export default function HomePage() {
 
       <Box sx={{ background: "#f7fafd", minHeight: "100vh", py: 10 }}>
         <Container maxWidth="md" sx={{ textAlign: "center" }}>
+          {/* Header */}
           <Box display="flex" justifyContent="center" alignItems="center" gap={1} mb={2}>
             <Box
               sx={{
